@@ -1,6 +1,6 @@
 # Docker ELK stack
 
-Run the latest version of the ELK (Elasticsearch, Logstash, Kibana) stack with Docker and Docker Compose.
+ELK (Elasticsearch, Logstash, Kibana) stack with Docker and Docker Compose.
 
 Aanalyze any data with Elasticsearch and the visualization with Kibana.
 
