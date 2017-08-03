@@ -6,13 +6,6 @@ services:
     build: elasticsearch/
     volumes:
       - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
-    ports:
-      - "9200:9200"
-      - "9300:9300"
-    environment:
-      ES_JAVA_OPTS: "-Xmx256m -Xms256m"
-    networks:
-      - elk
 
   logstash:
     build: logstash/
@@ -21,10 +14,6 @@ services:
       - ./logstash/pipeline:/usr/share/logstash/pipeline
     ports:
       - "5000:5000"
-    environment:
-      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
-    networks:
-      - elk
     depends_on:
       - elasticsearch
 
@@ -34,8 +23,6 @@ services:
       - ./kibana/config/:/usr/share/kibana/config
     ports:
       - "5601:5601"
-    networks:
-      - elk
     depends_on:
       - elasticsearch
 
@@ -43,12 +30,8 @@ services:
     build: filebeat/
     restart: unless-stopped
     volumes: 
-      - ./filebeat/config/:/usr/share/filebeat/config
-    networks:
-      - elk
+      - ./filebeat/config/filebeat.yml:/usr/share/filebeat/config/filebeat.yml
     depends_on:
       - elasticsearch
+    command: ['filebeat', '-e', '-c', './config/filebeat.yml']
 
-networks:
-  elk:
-    driver: bridge

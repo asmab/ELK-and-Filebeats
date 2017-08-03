@@ -19,10 +19,8 @@ filebeat.prospectors:
 
   # Paths that should be crawled and fetched. Glob based paths.
   paths:
-    - /archii/docker-elk/logs/*.log
-    - /var/log/*.log
+    - /var/log/syslog.log
     #- c:\programdata\elasticsearch\logs\*
-  path.config: /archii/docker-elk/filebeat/config
 
   # Exclude lines. A list of regular expressions to match. It drops the lines that are
   # matching any regular expression from the list.
@@ -80,14 +78,18 @@ filebeat.prospectors:
 # Multiple outputs may be used.
 
 #-------------------------- Elasticsearch output ------------------------------
-#output.elasticsearch:
+output.elasticsearch:
   # Array of hosts to connect to.
-  #hosts: ["localhost:9200"]
+  hosts: ["localhost:9200"]
 
   # Optional protocol and basic auth credentials.
   #protocol: "https"
   #username: "elastic"
   #password: "changeme"
+
+  template.name: "filebeat"
+  template.path: "filebeat.template.json"  
+  template.overwrite: true
 
 #----------------------------- Logstash output --------------------------------
 #output.logstash:
@@ -112,8 +114,11 @@ filebeat.prospectors:
 # Sets log level. The default log level is info.
 # Available log levels are: critical, error, warning, info, debug
 logging.level: debug
-logging.metrics.period: 1m
-
+logging.metrics.enabled: true
+logging.metrics.period: 60s
+logging.file:
+  path: /filebeatlogs
+  name: filebeat
 # At debug level, you can selectively enable logging only for some components.
 # To enable all selectors use ["*"]. Examples of other selectors are "beat",
 # "publish", "service".
